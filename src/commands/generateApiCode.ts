@@ -9,7 +9,6 @@ export const generateCode = (context: vscode.ExtensionContext) => {
       const clipboardText = rawClipboardText.trim()
       const validYapiId = isYapiId(clipboardText)
       genCodeByYapiId(clipboardText, rawClipboardText)
-
       // if (validYapiId) {
       // } else {
       //   vscode.window.showErrorMessage(

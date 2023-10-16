@@ -1,6 +1,7 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import { snippetMaterialsPath } from './vscodeEnv'
+import { getFileContent } from './file'
 /**
  * 获取 codeTemplate 目录下ejs文件作为代码模板并且合并代码片段 (兼容以前旧代码)
  *
@@ -8,7 +9,7 @@ import { snippetMaterialsPath } from './vscodeEnv'
  * @returns
  */
 
-export const getLocalApiTemplate = (privateMaterials?: boolean) => {
+export const getLocalApiTemplate = () => {
   let materials: {
     path: string
     name: string
@@ -17,8 +18,9 @@ export const getLocalApiTemplate = (privateMaterials?: boolean) => {
     template: string
     privateMaterials?: boolean
   }[] = []
-  console.log('test', snippetMaterialsPath)
-  fs.readdirSync(snippetMaterialsPath).map((filePath: string) => {
-    console.log(filePath, 'filePath')
-  })
+  try {
+    return getFileContent(path.join(snippetMaterialsPath, 'template.ejs'), true)
+  } catch {
+    return ''
+  }
 }
