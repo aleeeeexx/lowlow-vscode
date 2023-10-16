@@ -1,0 +1,74 @@
+{
+  "name": "lowlow-vs",
+  "displayName": "lowlow-vs",
+  "description": "vscode-plugin",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.83.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "lowlow-vs.generateApiCode",
+        "title": "生成接口代码"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "lowlow-vs/editor/context",
+          "group": "1_lowlow-vs@1"
+        }
+      ],
+      "lowlow-vs/editor/context": [
+        {
+          "command": "lowlow-vs.generateApiCode",
+          "group": "lowlow-vs@1"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "lowlow-vs/editor/context",
+        "label": "LowLow",
+        "icon": "$(octoface)"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/copy-paste": "^1.1.31",
+    "@types/fs-extra": "^11.0.2",
+    "@types/mocha": "^10.0.2",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.83.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "@vscode/test-electron": "^2.3.4",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "glob": "^10.3.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "mocha": "^10.2.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "copy-paste": "^1.5.3",
+    "fs-extra": "^11.1.1"
+  }
+}
