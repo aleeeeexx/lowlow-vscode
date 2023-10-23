@@ -3,6 +3,7 @@ import { getConfig, Config } from '../utils/config'
 import { getLocalApiTemplate } from '../utils/materia'
 import { getFuncNameAndTypeName } from '../utils/editor'
 import { fetchApiDetailInfo } from '../utils/request'
+const stripJsonComments = require('strip-json-comments')
 
 export const genCodeByYapiId = async (yapiId: string, rawClipboardText: string) => {
   // 获取项目的配置
@@ -60,5 +61,27 @@ const genTemplateModelByYapi = async (
 ) => {
   console.log(domain, yapiId, token, typeName, funcName, 'genTemplateModelByYapi')
   const res = await fetchApiDetailInfo(domain, yapiId, token)
+  const requestBodyTypeName = funcName.slice(0, 1).toUpperCase() + funcName.slice(1)
+  if (res.data.data.res_body_type === 'json') {
+    // 借助工具去除注释
+    const schema = JSON.parse(stripJsonComments(res.data.data.res_body))
+    console.log(schema, 'schema')
+  }
   console.log(res, 'res')
+}
+
+const fixSchema = (obj: object) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const key in obj) {
+    // @ts-ignore
+    if (typeof obj[key] === 'object' && obj[key] !== null) {
+      // @ts-ignore
+      if (obj[key].type === 'object' && !obj[key].properties) {
+        // @ts-ignore
+        delete obj[key]
+      }
+      // @ts-ignore
+      fixSchema(obj[key]) // 递归处理
+    }
+  }
 }
