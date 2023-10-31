@@ -1,9 +1,11 @@
 {
   "name": "lowlow-vscode",
-  "displayName": "lowlow-vs",
+  "displayName": "lowlow",
   "description": "a vscode-plugin for lowcode and will support ChatGPT",
   "author": "Aleeeeex <https://github.com/aleeeeexx>",
+  "icon": "assets/logo.jpg",
   "version": "0.0.1",
+  "publisher": "Aleeeeex",
   "engines": {
     "vscode": "^1.83.0"
   },
@@ -42,7 +44,7 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run compile",
+    "vscode:prepublish": "pnpm run compile ",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm run compile && pnpm run lint",
