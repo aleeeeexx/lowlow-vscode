@@ -1,9 +1,13 @@
 import { window, workspace } from 'vscode'
 import { getConfig, Config } from '../utils/config'
 import { getLocalApiTemplate } from '../utils/materia'
-import { getFuncNameAndTypeName } from '../utils/editor'
+import { getFuncNameAndTypeName, pasteToEditor } from '../utils/editor'
 import { fetchApiDetailInfo } from '../utils/request'
 const stripJsonComments = require('strip-json-comments')
+import { compile } from 'json-schema-to-typescript'
+import { compile as compileEjs, Model } from '../utils/ejs'
+const GenerateSchema = require('generate-schema')
+const strip = require('strip-comments')
 
 export const genCodeByYapiId = async (yapiId: string, rawClipboardText: string) => {
   // 获取项目的配置
@@ -49,6 +53,12 @@ export const genCodeByYapiId = async (yapiId: string, rawClipboardText: string) 
       selectInfo.typeName,
       selectInfo.funcName
     )
+    model.inputValues = selectInfo.inputValues
+    model.rawSelectedText = selectInfo.rawSelectedText
+    model.rawClipboardText = rawClipboardText
+    const code = compileEjs(template, model)
+    console.log(code, 'code')
+    pasteToEditor(code)
   } catch (error) {}
 }
 
@@ -62,12 +72,71 @@ const genTemplateModelByYapi = async (
   console.log(domain, yapiId, token, typeName, funcName, 'genTemplateModelByYapi')
   const res = await fetchApiDetailInfo(domain, yapiId, token)
   const requestBodyTypeName = funcName.slice(0, 1).toUpperCase() + funcName.slice(1)
+
   if (res.data.data.res_body_type === 'json') {
     // 借助工具去除注释
     const schema = JSON.parse(stripJsonComments(res.data.data.res_body))
-    console.log(schema, 'schema')
+    fixSchema(schema)
+    delete schema.title
+
+    // 生成响应ts代码
+    let ts = await compile(schema, typeName, {
+      bannerComment: '',
+    })
+    ts = ts.replace(/(\[k: string\]: unknown;)|\?/g, '')
+    let requestBodyType = ''
+    if (res.data.data.req_body_other) {
+      const reqBodyScheme = JSON.parse(stripJsonComments(res.data.data.req_body_other))
+      delete reqBodyScheme.title
+      requestBodyType = await compile(reqBodyScheme, `I${requestBodyTypeName}Data`, {
+        bannerComment: '',
+      })
+    }
+    const model: Model = {
+      type: ts,
+      requestBodyType: requestBodyType.replace(/\[k: string\]: unknown;/g, ''),
+      funcName,
+      typeName,
+      api: res.data.data,
+      inputValues: [],
+      mockCode: '',
+      mockData: '',
+      jsonData: {},
+      rawSelectedText: '',
+      rawClipboardText: '',
+    }
+    return model
   }
-  console.log(res, 'res')
+
+  // 如果res.data.data.res_body_type不是json, 则再处理一下res.data.data.res_body
+  const resBodyJson = JSON.parse(stripJsonComments(res.data.data.res_body))
+  const schema = GenerateSchema.json(typeName || 'Schema', resBodyJson)
+  let ts = await compile(schema, typeName, {
+    bannerComment: '',
+  })
+  ts = strip(ts.replace(/(\[k: string\]: unknown;)|\?/g, ''))
+  let requestBodyType = ''
+  if (res.data.data.req_body_other) {
+    const reqBodyScheme = JSON.parse(stripJsonComments(res.data.data.req_body_other))
+    delete reqBodyScheme.title
+    requestBodyType = await compile(reqBodyScheme, `I${requestBodyTypeName}Data`, {
+      bannerComment: '',
+    })
+  }
+  const model: Model = {
+    type: ts,
+    requestBodyType: requestBodyType.replace(/\[k: string\]: unknown;/g, ''),
+    funcName,
+    typeName,
+    api: res.data.data,
+    inputValues: [],
+    mockCode: '',
+    mockData: '',
+    jsonData: resBodyJson,
+    rawClipboardText: '',
+    rawSelectedText: '',
+  }
+  return model
 }
 
 const fixSchema = (obj: object) => {

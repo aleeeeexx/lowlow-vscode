@@ -1,5 +1,6 @@
 import * as copyPaste from 'copy-paste'
-import { window } from 'vscode'
+import { window, SnippetString } from 'vscode'
+import { getLastAcitveTextEditor } from '../context'
 
 export const getClipboardText = () => copyPaste.paste()
 
@@ -29,3 +30,32 @@ export const getFuncNameAndTypeName = () => {
     rawSelectedText: selectedText,
   }
 }
+
+export const pasteToEditor = (content: string, isInsertSnippet = true) => {
+  // vscode 本身代码片段语法
+  if (isInsertSnippet) {
+    return insertSnippet(content)
+  }
+}
+
+export const insertSnippet = (content: string) => {
+  console.log(window.activeTextEditor, 'window.activeTextEditor')
+  const activeTextEditor = window.activeTextEditor || getLastAcitveTextEditor()
+  if (activeTextEditor === undefined) {
+    throw new Error('无打开文件')
+  }
+  return activeTextEditor.insertSnippet(new SnippetString(content))
+}
+
+// export const selectDirectory = async () => {
+//   const options: OpenDialogOptions = {
+//     canSelectFolders: true,
+//     canSelectFiles: false,
+//     canSelectMany: false,
+//     openLabel: 'Open',
+//   }
+//   const selectFolderUri = await window.showOpenDialog(options)
+//   if (selectFolderUri && selectFolderUri.length > 0) {
+//     return selectFolderUri[0].fsPath
+//   }
+// }
