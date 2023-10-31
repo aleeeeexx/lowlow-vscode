@@ -1,7 +1,8 @@
 {
-  "name": "lowlow-vs",
+  "name": "lowlow-vscode",
   "displayName": "lowlow-vs",
-  "description": "vscode-plugin",
+  "description": "a vscode-plugin for lowcode and will support ChatGPT",
+  "author": "Aleeeeex <https://github.com/aleeeeexx>",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.83.0"
