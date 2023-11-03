@@ -71,6 +71,7 @@ const genTemplateModelByYapi = async (
 ) => {
   console.log(domain, yapiId, token, typeName, funcName, 'genTemplateModelByYapi')
   const res = await fetchApiDetailInfo(domain, yapiId, token)
+  console.log(res, 'res')
   const requestBodyTypeName = funcName.slice(0, 1).toUpperCase() + funcName.slice(1)
 
   if (res.data.data.res_body_type === 'json') {

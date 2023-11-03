@@ -1,0 +1,53 @@
+{
+  "yapi": {
+    "domain": "https://yapi.onewo.com",
+    "projects": [
+      {
+        "name": "对账中心",
+        "token": "2122e620d1c155303964c9ee8c196f86197b17f406c0db8658438d3ab5567d50",
+        "domain": "https://yapi.onewo.com"
+      },
+      {
+        "name": "美居商城",
+        "token": "17841752c639c125be6a808b50e8e4d39fb84d9a1c569fdbcadd2f9a35c5e70f",
+        "domain": "https://yapi.onewo.com"
+      },
+      {
+        "name": "平台装修/新交付",
+        "token": "42c77036cf16bcdf2da1a3f8c48472aca2caee4518c88df8d58ef8ddec6882d4",
+        "domain": "https://yapi.onewo.com"
+      },
+      {
+        "name": "为家统一线索平台服务(sapphire )",
+        "token": "fbaa769c0cfd5e8ad3cc483f8ff259de7998286a990bcc0bf8fabe77d2f331cd",
+        "domain": "https://yapi.onewo.com"
+      },
+      {
+        "token": "24e50fc7daed89634cefb9194bdbf84b4df59161b31c203892f8507cf8a8d8a0",
+        "domain": "https://yapi.onewo.com",
+        "name": "为家统一员工服务(saber)"
+      },
+      {
+        "token": "dd203eefd4f26ac4eafc87081ddb9436c0de4afc511d36be7e0ea6b34d76fa95",
+        "domain": "https://yapi.onewo.com",
+        "name": "为家/埋点服务"
+      },
+      {
+        "token": "feec71dd633f123f409361c0688da1c43023d744673dfd18678510a71ebdc7c6",
+        "domain": "https://yapi.onewo.com",
+        "name": "装修施工"
+      }
+    ]
+  },
+  "mock": {
+    "mockNumber": "Random.natural(1000,1000)",
+    "mockBoolean": "false",
+    "mockString": "Random.cword(5, 7)",
+    "mockKeyWordEqual": [],
+    "mockKeyWordLike": []
+  },
+  "commonlyUsedBlock": [
+    "vue-mvp 模块"
+  ],
+  "syncFolder": ""
+}
