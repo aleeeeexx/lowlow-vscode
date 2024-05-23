@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 import { getClipboardText } from '../utils/editor'
 import { isYapiId } from '../utils/json'
 import { genCodeByYapiId } from '../generatorCode/genByYapi'
-export const generateCode = (context: vscode.ExtensionContext) => {
+export const registerGenerateApiCodeCommand = (context: vscode.ExtensionContext) => {
   context.subscriptions.push(
     vscode.commands.registerTextEditorCommand('lowlow-vs.generateApiCode', () => {
       const rawClipboardText = getClipboardText()

@@ -53,3 +53,6 @@ export const getConfig: () => Config = () => {
 const getAllConfig = () => {
   return {}
 }
+
+export const getSyncFolder = () =>
+  workspace.getConfiguration('lowcode').get<string>('syncFolder', '')

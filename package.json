@@ -20,6 +20,10 @@
       {
         "command": "lowlow-vs.generateApiCode",
         "title": "生成接口代码"
+      },
+      {
+        "command": "lowlow-vs.generateFormCode",
+        "title": "自动生成表单"
       }
     ],
     "menus": {
@@ -32,6 +36,10 @@
       "lowlow-vs/editor/context": [
         {
           "command": "lowlow-vs.generateApiCode",
+          "group": "lowlow-vs@1"
+        },
+        {
+          "command": "lowlow-vs.generateFormCode",
           "group": "lowlow-vs@1"
         }
       ]
@@ -58,6 +66,7 @@
     "@types/copy-paste": "^1.1.31",
     "@types/ejs": "^3.1.4",
     "@types/fs-extra": "^11.0.2",
+    "@types/glob": "7.1.1",
     "@types/mocha": "^10.0.2",
     "@types/node": "18.x",
     "@types/vscode": "^1.83.0",
@@ -67,7 +76,7 @@
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "glob": "^10.3.3",
+    "glob": "7.1.6",
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
     "mocha": "^10.2.0",
@@ -78,12 +87,16 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@koa/cors": "^4.0.0",
     "axios": "^1.5.1",
     "copy-paste": "^1.5.3",
     "ejs": "^3.1.9",
     "fs-extra": "^11.1.1",
     "generate-schema": "^2.6.0",
     "json-schema-to-typescript": "^13.1.1",
+    "koa": "^2.14.2",
+    "koa-bodyparser": "^4.4.1",
+    "koa-router": "^12.0.1",
     "strip-comments": "^2.0.1",
     "strip-json-comments": "3.1.1"
   }
