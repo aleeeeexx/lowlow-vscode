@@ -19,11 +19,15 @@
     "commands": [
       {
         "command": "lowlow-vs.generateApiCode",
-        "title": "生成接口代码"
+        "title": "生成接口请求代码"
+      },
+      {
+        "command": "lowlow-vs.autoGenMainCode",
+        "title": "生成代码(vue/react/...)"
       },
       {
         "command": "lowlow-vs.generateFormCode",
-        "title": "自动生成表单"
+        "title": "生成表单"
       }
     ],
     "menus": {
@@ -31,6 +35,19 @@
         {
           "submenu": "lowlow-vs/editor/context",
           "group": "1_lowlow-vs@1"
+        }
+      ],
+      "explorer/context": [
+        {
+          "submenu": "lowlow-vs/explorer/context",
+          "group": "2_lowlow-vs@1",
+          "when": "explorerResourceIsFolder"
+        }
+      ],
+      "lowlow-vs/explorer/context": [
+        {
+          "command": "lowlow-vs.autoGenMainCode",
+          "group": "lowlow-vs@1"
         }
       ],
       "lowlow-vs/editor/context": [
@@ -47,6 +64,11 @@
     "submenus": [
       {
         "id": "lowlow-vs/editor/context",
+        "label": "LowLow",
+        "icon": "$(octoface)"
+      },
+      {
+        "id": "lowlow-vs/explorer/context",
         "label": "LowLow",
         "icon": "$(octoface)"
       }

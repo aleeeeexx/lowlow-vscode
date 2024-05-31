@@ -23,3 +23,21 @@ export const getLastAcitveTextEditor = () => {
   )
   return window.activeTextEditor || activeTextEditor
 }
+
+export const getExtensionPath = () => data.extensionPath
+
+export const init = (options: {
+  extensionContext?: ExtensionContext
+  rootPath?: string
+  extensionPath?: string
+}) => {
+  if (options.rootPath) {
+    data.rootPath = options.rootPath
+  }
+  if (options.extensionPath) {
+    data.extensionPath = options.extensionPath
+  }
+  if (options.extensionContext) {
+    data.extensionContext = options.extensionContext
+  }
+}

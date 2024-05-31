@@ -44,7 +44,9 @@ export async function renderEjsTemplates(
   templateDir: string,
   exclude: string[] = []
 ) {
-  console.log('renderEjsTemplates', templateData, templateDir, exclude)
+  console.log('renderEjsTemplates', templateData)
+  console.log('renderEjsTemplates2', templateDir)
+  console.log('renderEjsTemplates3', exclude)
   return new Promise<void>((resolve, reject) => {
     glob(
       '**',
@@ -73,9 +75,11 @@ export async function renderEjsTemplates(
           }
           return valid
         })
+        console.log(templateFiles, 'templateFilestemplateFiles')
         Promise.all(
           templateFiles.map(file => {
             const filepath = path.join(templateDir, file)
+            console.log('alexalex')
             return renderFile(filepath, templateData)
           })
         )
