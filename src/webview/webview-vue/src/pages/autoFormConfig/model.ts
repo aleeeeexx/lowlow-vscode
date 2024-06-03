@@ -47,7 +47,29 @@ export const useModel = () => {
     'range-picker',
     'transfer',
   ]
-  return { isDefineProps, isDefineEmits, formItems, ANTD_COMPONENT_OPTIONS }
+
+  const TYPE_OPTIONS = [
+    'string',
+    'number',
+    'boolean',
+    'string[]',
+    'number[]',
+    'boolean[]',
+    'Dayjs',
+    '[Dayjs,Dayjs]',
+    '图片、视频、文件默认值选空数组',
+  ]
+
+  const DEFUALT_VALUES = ['""', 'false', 'true', '0', 'undefined', '[]']
+
+  return {
+    isDefineProps,
+    isDefineEmits,
+    formItems,
+    ANTD_COMPONENT_OPTIONS,
+    TYPE_OPTIONS,
+    DEFUALT_VALUES,
+  }
 }
 
 export type Model = ReturnType<typeof useModel>

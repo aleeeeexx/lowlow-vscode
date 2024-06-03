@@ -11,6 +11,7 @@ const errorCallbacks: { [propName: string]: (data: any) => void } = {}
 // 监听vscode,接收来自vscode的信息
 export const initListenVscode = () => {
   window.addEventListener('message', event => {
+    console.log('messagefrom-vscdoe')
     const message = event.data
     switch (message.cmd) {
       // 来自vscode的回调
@@ -68,6 +69,7 @@ export function callVscode(
   if (cb) {
     const cbid = `${Date.now()}${Math.round(Math.random() * 100000)}`
     callbacks[cbid] = cb
+    console.log(data, 'data')
     vscode.postMessage({
       ...data,
       cbid,
@@ -87,5 +89,9 @@ export const taskHandler: {
   // 跳转路由
   route: (data: { path: string }) => {
     router.push(data.path)
+  },
+  updateSelectedFolder: (data: { selectedFolder: string }) => {
+    console.log('updateInweview', data)
+    localStorage.setItem('selectedFolder', data.selectedFolder || '')
   },
 }

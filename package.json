@@ -48,15 +48,15 @@
         {
           "command": "lowlow-vs.autoGenMainCode",
           "group": "lowlow-vs@1"
+        },
+        {
+          "command": "lowlow-vs.generateFormCode",
+          "group": "lowlow-vs@1"
         }
       ],
       "lowlow-vs/editor/context": [
         {
           "command": "lowlow-vs.generateApiCode",
-          "group": "lowlow-vs@1"
-        },
-        {
-          "command": "lowlow-vs.generateFormCode",
           "group": "lowlow-vs@1"
         }
       ]

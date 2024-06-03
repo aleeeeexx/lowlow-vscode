@@ -76,18 +76,20 @@ export const usePresenter = () => {
   // }
 
   const handleConfirmGenerateCode = () => {
+    //获取当前操作文件路径
+    const selectedFolder = localStorage.getItem('selectedFolder')
     // 把数据传输到vscode
     genCodeByBlockMaterial({
       material: '表单',
       model: {
         modal: false,
         title: '',
-        formItems: model.formItems.value,
+        formItems: JSON.parse(JSON.stringify(model.formItems.value)),
         independentFormFile: false,
         excludeOriFile: false,
       },
       path: '',
-      createPath: [],
+      createPath: selectedFolder ? [selectedFolder] : [],
       privateMaterials: undefined,
     }).then(() => {
       message.success('生成成功')

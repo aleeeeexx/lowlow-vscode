@@ -104,5 +104,7 @@ async function renderFile(templateFilepath: string, data: ejs.Data) {
     })
   } catch {}
   await fse.rename(templateFilepath, targetFilePath)
+  console.log(content, 'content')
+  console.log(targetFilePath, 'targetFilePath')
   await fse.writeFile(targetFilePath, content)
 }

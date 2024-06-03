@@ -27,13 +27,29 @@
             <a-input v-model:value="item.key" />
           </a-form-item>
           <a-form-item label="字段类型">
-            <a-input v-model:value="item.type" />
+            <a-select ref="select" v-model:value="item.type">
+              <a-select-option
+                :value="typeOption"
+                v-for="(typeOption, tIdx) in model.TYPE_OPTIONS"
+                :key="tIdx"
+              >
+                {{ typeOption }}
+              </a-select-option>
+            </a-select>
           </a-form-item>
           <a-form-item label="是否可选">
             <a-switch v-model:checked="item.optional" />
           </a-form-item>
           <a-form-item label="默认值">
-            <a-input v-model:value="item.defaultValue" />
+            <a-select ref="select" v-model:value="item.defaultValue">
+              <a-select-option
+                :value="defulatOption"
+                v-for="(defulatOption, dIdx) in model.DEFUALT_VALUES"
+                :key="dIdx"
+              >
+                {{ defulatOption }}
+              </a-select-option>
+            </a-select>
           </a-form-item>
           <a-form-item label="组件">
             <a-select ref="select" v-model:value="item.component">
@@ -56,7 +72,7 @@
             <a-switch v-model:checked="item.required" />
           </a-form-item>
           <a-form-item label="校验失败message">
-            <a-input v-model:value="item.placeholder" />
+            <a-input v-model:value="item.message" />
           </a-form-item>
           <a-form-item label="maxlength">
             <a-input v-model:value="item.maxlength" />

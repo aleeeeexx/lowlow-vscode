@@ -42731,19 +42731,22 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.registerGenerateFormCodeCommand = void 0;
 const vscode = __webpack_require__(/*! vscode */ "vscode");
 // import { genFormCodeByBlock } from '../generatorCode/genByBlock'
+const platform_1 = __webpack_require__(/*! ../utils/platform */ "./src/utils/platform.ts");
 const index_1 = __webpack_require__(/*! ../webview/index */ "./src/webview/index.ts");
 const registerGenerateFormCodeCommand = (context) => {
-    context.subscriptions.push(vscode.commands.registerTextEditorCommand('lowlow-vs.generateFormCode', () => {
+    context.subscriptions.push(vscode.commands.registerCommand('lowlow-vs.generateFormCode', args => {
+        const path = (0, platform_1.formatPath)(args?.path);
+        console.log(path, 'myformpath');
         console.log('lowlow-vs.registerGenerateFormCodeCommand');
         (0, index_1.showWebView)(context, {
             key: 'main',
             viewColumn: vscode.ViewColumn.Two,
-            task: {
-                task: 'route',
-                data: {
-                    path: '/genFormData',
-                },
-            },
+            task: path
+                ? {
+                    task: 'updateSelectedFolder',
+                    data: { selectedFolder: path },
+                }
+                : undefined,
         });
         // genFormCodeByBlock()
     }));
@@ -43280,6 +43283,8 @@ async function renderFile(templateFilepath, data) {
     }
     catch { }
     await fse.rename(templateFilepath, targetFilePath);
+    console.log(content, 'content');
+    console.log(targetFilePath, 'targetFilePath');
     await fse.writeFile(targetFilePath, content);
 }
 
@@ -43310,6 +43315,120 @@ const getFileContent = (filePath, fullPath = false) => {
     return fileContent;
 };
 exports.getFileContent = getFileContent;
+
+
+/***/ }),
+
+/***/ "./src/utils/generate.ts":
+/*!*******************************!*\
+  !*** ./src/utils/generate.ts ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.genCodeByBlock = void 0;
+/* eslint-disable no-eval */
+const path = __webpack_require__(/*! path */ "path");
+const vscode = __webpack_require__(/*! vscode */ "vscode");
+const fs = __webpack_require__(/*! fs-extra */ "./node_modules/fs-extra/lib/index.js");
+const vscodeEnv_1 = __webpack_require__(/*! ./vscodeEnv */ "./src/utils/vscodeEnv.ts");
+const ejs_1 = __webpack_require__(/*! ./ejs */ "./src/utils/ejs.ts");
+const lib_1 = __webpack_require__(/*! ./lib */ "./src/utils/lib.ts");
+const outputChannel_1 = __webpack_require__(/*! ./outputChannel */ "./src/utils/outputChannel.ts");
+// import { getLastAcitveTextEditor } from '../context'
+const config_1 = __webpack_require__(/*! ./config */ "./src/utils/config.ts");
+// import { createChatCompletionForScript } from './openai'
+const genCodeByBlock = async (data) => {
+    // 默认是.lowcode路径
+    let tempWorkPath = vscodeEnv_1.tempWorkPath;
+    // 如果有私有物料，就是同步目录下的.lowcode
+    if (data.privateMaterials) {
+        tempWorkPath = path.join((0, config_1.getSyncFolder)(), '.lowcode');
+    }
+    console.log('tempWorkPath', tempWorkPath);
+    try {
+        //获取物料
+        const block = path.join(data.privateMaterials ? (0, vscodeEnv_1.getPrivateBlockMaterialsPath)() : vscodeEnv_1.blockMaterialsPath, data.material);
+        console.log('block', block);
+        const schemaFile = path.join(block, 'config/schema.json');
+        const schama = fs.readJSONSync(schemaFile);
+        console.log('bloschemaFileck', schama, schemaFile);
+        fs.copySync(block, tempWorkPath);
+        let excludeCompile = [];
+        if (schama.excludeCompile) {
+            excludeCompile = schama.excludeCompile;
+        }
+        if (schama.conditionFiles) {
+            Object.keys(data.model).map(key => {
+                if (schama.conditionFiles[key] &&
+                    schama.conditionFiles[key].value === data.model[key] &&
+                    Array.isArray(schama.conditionFiles[key].exclude)) {
+                    schama.conditionFiles[key].exclude.map((exclude) => {
+                        fs.removeSync(path.join(tempWorkPath, 'src', exclude));
+                        fs.removeSync(path.join(tempWorkPath, exclude));
+                    });
+                }
+            });
+        }
+        const scriptFile = path.join(block, 'script/index.js'); // 不能使用临时目录里的文件，会导致 ts-node 报错
+        const hook = {
+            beforeCompile: (context) => Promise.resolve(undefined),
+            afterCompile: (context) => Promise.resolve(undefined),
+            complete: (context) => Promise.resolve(undefined),
+        };
+        if (fs.existsSync(scriptFile)) {
+            delete eval('require').cache[eval('require').resolve(scriptFile)];
+            const script = eval('require')(scriptFile);
+            if (script.beforeCompile) {
+                hook.beforeCompile = script.beforeCompile;
+            }
+            if (script.afterCompile) {
+                hook.afterCompile = script.afterCompile;
+            }
+            if (script.complete) {
+                hook.complete = script.complete;
+            }
+        }
+        const context = {
+            model: data.model,
+            vscode,
+            workspaceRootPath: vscodeEnv_1.rootPath,
+            env: (0, vscodeEnv_1.getEnv)(),
+            libs: (0, lib_1.getInnerLibs)(),
+            outputChannel: (0, outputChannel_1.getOutputChannel)(),
+            log: (0, outputChannel_1.getOutputChannel)(),
+            createBlockPath: path.join(data.path, ...data.createPath).replace(/\\/g, '/'),
+            // createChatCompletion: createChatCompletionForScript,
+            materialPath: block,
+        };
+        console.log('context', context);
+        data.model = {
+            ...data.model,
+            createBlockPath: path.join(data.path, ...data.createPath).replace(/\\/g, '/'),
+        };
+        const extendModel = await hook.beforeCompile(context);
+        if (extendModel) {
+            data.model = {
+                ...data.model,
+                ...extendModel,
+            };
+        }
+        await (0, ejs_1.renderEjsTemplates)(data.model, path.join(tempWorkPath, 'src'), excludeCompile);
+        await hook.afterCompile(context);
+        console.log(path.join(tempWorkPath, 'src'), data, 'creatttttttttt');
+        fs.copySync(path.join(tempWorkPath, 'src'), path.join(data.path, ...data.createPath));
+        await hook.complete(context);
+        fs.removeSync(tempWorkPath);
+        console.log('end-chengcheng');
+    }
+    catch (ex) {
+        fs.remove(tempWorkPath);
+        throw ex;
+    }
+};
+exports.genCodeByBlock = genCodeByBlock;
 
 
 /***/ }),
@@ -43723,6 +43842,26 @@ exports.createBlock = createBlock;
 
 /***/ }),
 
+/***/ "./src/webview/controllers/generate.ts":
+/*!*********************************************!*\
+  !*** ./src/webview/controllers/generate.ts ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.genCodeByBlockMaterial = void 0;
+const generate_1 = __webpack_require__(/*! ../../utils/generate */ "./src/utils/generate.ts");
+const genCodeByBlockMaterial = async (message) => {
+    await (0, generate_1.genCodeByBlock)(message.data);
+    return '生成成功';
+};
+exports.genCodeByBlockMaterial = genCodeByBlockMaterial;
+
+
+/***/ }),
+
 /***/ "./src/webview/index.ts":
 /*!******************************!*\
   !*** ./src/webview/index.ts ***!
@@ -43774,6 +43913,7 @@ const showWebView = (context, options) => {
         //   注册webview事件
         // 在vscode中监听webview传递过来的消息，在webview中会通过 vscode.postMessage{command: 'someCommand',data: { /* 你的数据 */ },} 发送信息
         panel.webview.onDidReceiveMessage(async (message) => {
+            console.log(message, 'message');
             if (routes_1.routes[message.cmd]) {
                 try {
                     const res = await routes_1.routes[message.cmd](message, {
@@ -43820,41 +43960,6 @@ const showWebView = (context, options) => {
     }
 };
 exports.showWebView = showWebView;
-// 获取web-view的vue项目-默认先走这个，后续优化走vue项目
-const getReactHtmlForWebview = (webview) => {
-    const mainScriptPathOnDisk = vscode.Uri.file(path.join((0, context_1.getExtensionPath)(), 'webview-dist', 'main.js'));
-    const vendorsScriptPathOnDisk = vscode.Uri.file(path.join((0, context_1.getExtensionPath)(), 'webview-dist', 'vendors.js'));
-    const mianScriptUri = 'http://localhost:8000/main.js';
-    const vendorsScriptUri = 'http://localhost:8000/vendors.js';
-    // const mianScriptUri = webview.asWebviewUri(mainScriptPathOnDisk);
-    // const vendorsScriptUri = webview.asWebviewUri(vendorsScriptPathOnDisk);
-    return `
-			<!DOCTYPE html>
-			<html>
-			<head>
-				<meta charset="utf-8" />
-				<meta
-				name="viewport"
-				content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
-				/>
-				<script>
-				    window.routerBase = "/";
-				</script>
-				<script>
-                   window.g_path = "/";
-				</script>
-				<script>
-				   window.vscode = acquireVsCodeApi();
-                </script>
-			</head>
-			<body>
-				<div id="root"></div>
-				<script src="${vendorsScriptUri}"></script>
-				<script src="${mianScriptUri}"></script>
-			</body>
-		</html>
-`;
-};
 // 获取web-view的vue项目
 const getVueHtmlForWebview = (context, webview) => {
     const isProduction = context.extensionMode === vscode.ExtensionMode.Production;
@@ -43906,8 +44011,10 @@ const getWebviewContent = (srcUri) => {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.routes = void 0;
 const block = __webpack_require__(/*! ../controllers/block */ "./src/webview/controllers/block.ts");
+const generate = __webpack_require__(/*! ../controllers/generate */ "./src/webview/controllers/generate.ts");
 exports.routes = {
     createBlockTemplate: block.createBlock,
+    genCodeByBlockMaterial: generate.genCodeByBlockMaterial,
 };
 
 

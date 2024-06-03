@@ -65,6 +65,7 @@ export const showWebView = (
     // 在vscode中监听webview传递过来的消息，在webview中会通过 vscode.postMessage{command: 'someCommand',data: { /* 你的数据 */ },} 发送信息
     panel.webview.onDidReceiveMessage(
       async (message: { cmd: string; cbid: string; data: any; skipError?: boolean }) => {
+        console.log(message, 'message')
         if (routes[message.cmd]) {
           try {
             const res = await routes[message.cmd](message, {
@@ -116,47 +117,6 @@ export const showWebView = (
       })
     }
   }
-}
-
-// 获取web-view的vue项目-默认先走这个，后续优化走vue项目
-const getReactHtmlForWebview = (webview: vscode.Webview) => {
-  const mainScriptPathOnDisk = vscode.Uri.file(
-    path.join(getExtensionPath(), 'webview-dist', 'main.js')
-  )
-  const vendorsScriptPathOnDisk = vscode.Uri.file(
-    path.join(getExtensionPath(), 'webview-dist', 'vendors.js')
-  )
-  const mianScriptUri = 'http://localhost:8000/main.js'
-  const vendorsScriptUri = 'http://localhost:8000/vendors.js'
-  // const mianScriptUri = webview.asWebviewUri(mainScriptPathOnDisk);
-  // const vendorsScriptUri = webview.asWebviewUri(vendorsScriptPathOnDisk);
-
-  return `
-			<!DOCTYPE html>
-			<html>
-			<head>
-				<meta charset="utf-8" />
-				<meta
-				name="viewport"
-				content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
-				/>
-				<script>
-				    window.routerBase = "/";
-				</script>
-				<script>
-                   window.g_path = "/";
-				</script>
-				<script>
-				   window.vscode = acquireVsCodeApi();
-                </script>
-			</head>
-			<body>
-				<div id="root"></div>
-				<script src="${vendorsScriptUri}"></script>
-				<script src="${mianScriptUri}"></script>
-			</body>
-		</html>
-`
 }
 
 // 获取web-view的vue项目

@@ -9,4 +9,4 @@ createApp(App).use(router).use(Antd).mount('#app')
 
 initListenVscode()
 // 初始化完毕，通知 vscode 已加载完毕
-vscode.postMessage({ cmd: 'webviewLoaded' })
+// vscode.postMessage({ cmd: 'webviewLoaded' })
