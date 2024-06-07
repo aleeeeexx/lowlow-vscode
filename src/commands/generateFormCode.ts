@@ -12,12 +12,10 @@ export const registerGenerateFormCodeCommand = (context: vscode.ExtensionContext
       showWebView(context, {
         key: 'main',
         viewColumn: vscode.ViewColumn.Two,
-        task: path
-          ? {
-              task: 'updateSelectedFolder',
-              data: { selectedFolder: path },
-            }
-          : undefined,
+        task: {
+          task: 'route',
+          data: { path: '/autoFormConfig', selectedFolder: path ?? undefined },
+        },
       })
 
       // genFormCodeByBlock()

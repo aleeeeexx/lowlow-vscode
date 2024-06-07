@@ -28,6 +28,10 @@
       {
         "command": "lowlow-vs.generateFormCode",
         "title": "生成表单"
+      },
+      {
+        "command": "lowlow-vs.generateTableCode",
+        "title": "生成增删查改列表"
       }
     ],
     "menus": {
@@ -51,6 +55,10 @@
         },
         {
           "command": "lowlow-vs.generateFormCode",
+          "group": "lowlow-vs@1"
+        },
+        {
+          "command": "lowlow-vs.generateTableCode",
           "group": "lowlow-vs@1"
         }
       ],

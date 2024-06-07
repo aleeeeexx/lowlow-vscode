@@ -42741,12 +42741,10 @@ const registerGenerateFormCodeCommand = (context) => {
         (0, index_1.showWebView)(context, {
             key: 'main',
             viewColumn: vscode.ViewColumn.Two,
-            task: path
-                ? {
-                    task: 'updateSelectedFolder',
-                    data: { selectedFolder: path },
-                }
-                : undefined,
+            task: {
+                task: 'route',
+                data: { path: 'autoFormConfig', selectedFolder: path ?? undefined },
+            },
         });
         // genFormCodeByBlock()
     }));
@@ -42802,6 +42800,38 @@ const registerGenerateMainCodeCommand = (context) => {
     }));
 };
 exports.registerGenerateMainCodeCommand = registerGenerateMainCodeCommand;
+
+
+/***/ }),
+
+/***/ "./src/commands/generateTableCode.ts":
+/*!*******************************************!*\
+  !*** ./src/commands/generateTableCode.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.registerGenerateTableCodeCommand = void 0;
+const vscode = __webpack_require__(/*! vscode */ "vscode");
+const platform_1 = __webpack_require__(/*! ../utils/platform */ "./src/utils/platform.ts");
+const index_1 = __webpack_require__(/*! ../webview/index */ "./src/webview/index.ts");
+const registerGenerateTableCodeCommand = (context) => {
+    context.subscriptions.push(vscode.commands.registerCommand('lowlow-vs.generateTableCode', args => {
+        const path = (0, platform_1.formatPath)(args?.path);
+        console.log('lowlow-vs.generateTableCode');
+        (0, index_1.showWebView)(context, {
+            key: 'main',
+            viewColumn: vscode.ViewColumn.Two,
+            task: {
+                task: 'route',
+                data: { path: '/autoTableConfig', selectedFolder: path ?? undefined },
+            },
+        });
+    }));
+};
+exports.registerGenerateTableCodeCommand = registerGenerateTableCodeCommand;
 
 
 /***/ }),
@@ -56389,6 +56419,7 @@ const vscode = __webpack_require__(/*! vscode */ "vscode");
 const generateApiCode_1 = __webpack_require__(/*! ./commands/generateApiCode */ "./src/commands/generateApiCode.ts");
 const generateFormCode_1 = __webpack_require__(/*! ./commands/generateFormCode */ "./src/commands/generateFormCode.ts");
 const generateMainCode_1 = __webpack_require__(/*! ./commands/generateMainCode */ "./src/commands/generateMainCode.ts");
+const generateTableCode_1 = __webpack_require__(/*! ./commands/generateTableCode */ "./src/commands/generateTableCode.ts");
 const context_1 = __webpack_require__(/*! ./context */ "./src/context.ts");
 function activate(context) {
     console.log('Congratulations, your extension "lowlow-vscode" is now active!');
@@ -56403,8 +56434,10 @@ function activate(context) {
     (0, generateApiCode_1.registerGenerateApiCodeCommand)(context);
     //注册自动生成框架代码(vue/react/...)的命令
     (0, generateMainCode_1.registerGenerateMainCodeCommand)(context);
-    // 注册生成form代码的命令
+    // 注册生成表单代码的命令
     (0, generateFormCode_1.registerGenerateFormCodeCommand)(context);
+    // 注册生成增删查改表格
+    (0, generateTableCode_1.registerGenerateTableCodeCommand)(context);
 }
 exports.activate = activate;
 function deactivate() { }

@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 const autoFormConfig = () => import('../pages/autoFormConfig/index.vue')
+const autoTableConfig = () => import('../pages/autoTableConfig/index.vue')
 // 1. 定义路由组件.
 // 也可以从其他文件导入
 const routes = [
@@ -8,6 +9,13 @@ const routes = [
     component: autoFormConfig,
     meta: {
       title: '配置表单',
+    },
+  },
+  {
+    path: '/autoTableConfig',
+    component: autoTableConfig,
+    meta: {
+      title: '配置表格',
     },
   },
 ]

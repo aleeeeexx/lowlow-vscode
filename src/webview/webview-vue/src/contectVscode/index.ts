@@ -87,11 +87,13 @@ export const taskHandler: {
   [propName: string]: (data: any) => void
 } = {
   // 跳转路由
-  route: (data: { path: string }) => {
+  route: (data: { path: string; selectedFolder: string }) => {
+    if (data.selectedFolder) {
+      localStorage.setItem('selectedFolder', data.selectedFolder)
+    }
     router.push(data.path)
   },
   updateSelectedFolder: (data: { selectedFolder: string }) => {
-    console.log('updateInweview', data)
     localStorage.setItem('selectedFolder', data.selectedFolder || '')
   },
 }

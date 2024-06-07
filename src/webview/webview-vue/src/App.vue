@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import autoFormConfig from './pages/autoFormConfig/index.vue'
+// import autoFormConfig from './pages/autoFormConfig/index.vue'
 </script>
 
 <template>
   <RouterView></RouterView>
-  <autoFormConfig></autoFormConfig>
+  <!-- <autoFormConfig></autoFormConfig> -->
 </template>
 
 <style scoped></style>
