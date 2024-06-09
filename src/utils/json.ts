@@ -117,3 +117,37 @@ export const mockFromSchema = (schema: any) => {
     mockData: `{${jsonStr}}`,
   }
 }
+export const jsonIsValid = (jsonString: string) => {
+  if (typeof jsonString !== 'string') {
+    return false
+  }
+  try {
+    const result = JSON.parse(jsonString)
+    const type = Object.prototype.toString.call(result)
+    return type === '[object Object]' || type === '[object Array]'
+  } catch (err) {
+    return false
+  }
+}
+
+export const jsonParse = (clipboardText: string) => {
+  if (typeof clipboardText !== 'string') {
+    return ''
+  }
+  let func: any = function () {
+    return ''
+  }
+  if (
+    clipboardText.startsWith('var') ||
+    clipboardText.startsWith('let') ||
+    clipboardText.startsWith('const')
+  ) {
+    clipboardText = clipboardText.replace(/(var|let|const).*=/, '')
+  }
+  try {
+    func = new Function(`return ${clipboardText.trim()}`)
+    return func()
+  } catch (ex) {
+    return ''
+  }
+}

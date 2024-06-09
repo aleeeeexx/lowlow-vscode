@@ -35,6 +35,8 @@ export type Config = {
   commonlyUsedBlock?: string[]
 }
 
+export const getTemplateFilePath = () => 'codeTemplate'
+
 export const getConfig: () => Config = () => {
   let config: Config
   if (fs.existsSync(path.join(rootPath, '.lowlowrc'))) {

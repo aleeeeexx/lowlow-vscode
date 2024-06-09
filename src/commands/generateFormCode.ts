@@ -1,5 +1,4 @@
 import * as vscode from 'vscode'
-// import { genFormCodeByBlock } from '../generatorCode/genByBlock'
 import { formatPath } from '../utils/platform'
 import { showWebView } from '../webview/index'
 
@@ -17,8 +16,6 @@ export const registerGenerateFormCodeCommand = (context: vscode.ExtensionContext
           data: { path: '/autoFormConfig', selectedFolder: path ?? undefined },
         },
       })
-
-      // genFormCodeByBlock()
     })
   )
 }

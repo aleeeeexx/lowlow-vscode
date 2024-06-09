@@ -14,6 +14,7 @@ import {
 import { renderEjsTemplates, compile } from './ejs'
 import { getInnerLibs } from './lib'
 import { getOutputChannel } from './outputChannel'
+import type { FigmaDataType } from '../utils/openServer'
 // import { getLastAcitveTextEditor } from '../context'
 import { getSyncFolder } from './config'
 // import { createChatCompletionForScript } from './openai'
@@ -120,4 +121,20 @@ export const genCodeByBlock = async (data: {
     fs.remove(tempWorkPath)
     throw ex
   }
+}
+
+export const genCodeByFigma = async (figmaData: FigmaDataType, path: string) => {
+  const genParams = {
+    material: figmaData.type,
+    model: {
+      formItems: figmaData.formItems,
+      defineProps: figmaData.defineProps,
+      defineEmits: figmaData.defineEmits,
+    },
+    path,
+    createPath: [],
+    privateMaterials: undefined,
+  }
+  console.log(genParams, 'genParams')
+  genCodeByBlock(genParams)
 }

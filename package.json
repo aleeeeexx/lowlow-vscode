@@ -32,6 +32,14 @@
       {
         "command": "lowlow-vs.generateTableCode",
         "title": "生成增删查改列表"
+      },
+      {
+        "command": "lowlow-vs.figmaToCode",
+        "title": "通过figma生成表单代码"
+      },
+      {
+        "command": "lowlow-vs.generateSnippetCodeByJson",
+        "title": "通过JSON生成TS类型代码"
       }
     ],
     "menus": {
@@ -60,11 +68,19 @@
         {
           "command": "lowlow-vs.generateTableCode",
           "group": "lowlow-vs@1"
+        },
+        {
+          "command": "lowlow-vs.figmaToCode",
+          "group": "lowlow-vs@1"
         }
       ],
       "lowlow-vs/editor/context": [
         {
           "command": "lowlow-vs.generateApiCode",
+          "group": "lowlow-vs@1"
+        },
+        {
+          "command": "lowlow-vs.generateSnippetCodeByJson",
           "group": "lowlow-vs@1"
         }
       ]
@@ -97,6 +113,7 @@
     "@types/ejs": "^3.1.4",
     "@types/fs-extra": "^11.0.2",
     "@types/glob": "7.1.1",
+    "@types/koa": "^2.15.0",
     "@types/mocha": "^10.0.2",
     "@types/node": "18.x",
     "@types/vscode": "^1.83.0",
@@ -124,7 +141,7 @@
     "fs-extra": "^11.1.1",
     "generate-schema": "^2.6.0",
     "json-schema-to-typescript": "^13.1.1",
-    "koa": "^2.14.2",
+    "koa": "^2.15.3",
     "koa-bodyparser": "^4.4.1",
     "koa-router": "^12.0.1",
     "strip-comments": "^2.0.1",
