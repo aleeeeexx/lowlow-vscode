@@ -4,7 +4,7 @@
   "description": "a vscode-plugin for lowcode and will support ChatGPT",
   "author": "Aleeeeex <https://github.com/aleeeeexx>",
   "icon": "assets/logo.jpg",
-  "version": "0.0.5",
+  "version": "1.0.5",
   "publisher": "Aleeeeex",
   "repository": "https://github.com/aleeeeexx/lowlow-vscode",
   "engines": {

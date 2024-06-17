@@ -60458,7 +60458,6 @@ class MyWebviewViewProvider {
 const openChatGPTView = (selectedText, gptType) => {
     // 唤醒 chatGPT 视图
     vscode_1.commands.executeCommand('workbench.view.extension.lowlow-vs').then(() => {
-        console.log('唤醒');
         vscode_1.commands.executeCommand('setContext', 'lowlow-vs.chatGPTView', true).then(() => {
             const config = vscode_1.workspace.getConfiguration('lowlow-vs');
             const hostname = config.get('hostname');
