@@ -10,6 +10,10 @@
   },
   "dependencies": {
     "ant-design-vue": "4.x",
+    "highlightjs": "^9.16.2",
+    "markdown-it": "^14.1.0",
+    "markdown-it-code-copy": "^0.1.2",
+    "markdown-it-highlightjs": "^4.1.0",
     "vue": "^3.4.21",
     "vue-router": "4"
   },
@@ -18,6 +22,7 @@
     "sass": "^1.77.2",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
+    "vite-plugin-css-injected-by-js": "^3.5.1",
     "vue-tsc": "^2.0.6"
   }
 }

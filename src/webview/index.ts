@@ -120,7 +120,7 @@ export const showWebView = (
 }
 
 // 获取web-view的vue项目
-const getVueHtmlForWebview = (context: vscode.ExtensionContext, webview: vscode.Webview) => {
+export const getVueHtmlForWebview = (context: vscode.ExtensionContext, webview: vscode.Webview) => {
   const isProduction = context.extensionMode === vscode.ExtensionMode.Production
   let srcUrl: string | vscode.Uri = ''
 

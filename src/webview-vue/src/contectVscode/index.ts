@@ -87,11 +87,15 @@ export const taskHandler: {
   [propName: string]: (data: any) => void
 } = {
   // 跳转路由
-  route: (data: { path: string; selectedFolder: string }) => {
+  route: (data: { path: string; selectedFolder: string; query?: { [key: string]: string } }) => {
     if (data.selectedFolder) {
       localStorage.setItem('selectedFolder', data.selectedFolder)
     }
-    router.push(data.path)
+    console.log(data, 'routedata')
+    router.replace({
+      path: data.path,
+      query: data.query,
+    })
   },
   updateSelectedFolder: (data: { selectedFolder: string }) => {
     localStorage.setItem('selectedFolder', data.selectedFolder || '')

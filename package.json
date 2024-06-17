@@ -39,7 +39,59 @@
       },
       {
         "command": "lowlow-vs.generateSnippetCodeByJson",
-        "title": "通过JSON生成TS类型代码"
+        "title": "通过JSON生成代码"
+      },
+      {
+        "command": "lowlow-vs.openSetting",
+        "title": "设置",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "lowlow-vs.explainByChatGPT",
+        "title": "GPT解释这段代码"
+      },
+      {
+        "command": "lowlow-vs.chatGPTView",
+        "title": "chatGPT对话框"
+      },
+      {
+        "command": "lowlow-vs.openChatGPTView",
+        "title": "打开chatGPT对话框"
+      },
+      {
+        "command": "lowlow-vs.hideChatGPTView",
+        "title": "关闭chatGPT对话框",
+        "icon": "$(close)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "lowlow-vs",
+          "title": "lowlow-vs",
+          "icon": "images/hubot.png"
+        }
+      ]
+    },
+    "views": {
+      "lowlow-vs": [
+        {
+          "id": "lowlow-vs.welcome",
+          "name": "welcome",
+          "when": "!lowlow-vs.chatGPTView"
+        },
+        {
+          "type": "webview",
+          "id": "lowlow-vs.chatGPTView",
+          "name": "chatGPT",
+          "when": "lowlow-vs.chatGPTView"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "lowlow-vs.welcome",
+        "contents": "[打开chatGPT对话框](command:lowlow-vs.openChatGPTView)\n[设置](command:lowlow-vs.openSetting)"
       }
     ],
     "menus": {
@@ -54,6 +106,18 @@
           "submenu": "lowlow-vs/explorer/context",
           "group": "2_lowlow-vs@1",
           "when": "explorerResourceIsFolder"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "lowlow-vs.hideChatGPTView",
+          "when": "view == lowlow-vs.chatGPTView",
+          "group": "navigation@4"
+        },
+        {
+          "command": "lowlow-vs.openSetting",
+          "when": "view == lowlow-vs.chatGPTView",
+          "group": "navigation@3"
         }
       ],
       "lowlow-vs/explorer/context": [
@@ -82,6 +146,14 @@
         {
           "command": "lowlow-vs.generateSnippetCodeByJson",
           "group": "lowlow-vs@1"
+        },
+        {
+          "command": "lowlow-vs.openChatGPTView",
+          "group": "lowlow-vs@1"
+        },
+        {
+          "command": "lowlow-vs.explainByChatGPT",
+          "group": "lowlow-vs@1"
         }
       ]
     },
@@ -96,10 +168,33 @@
         "label": "LowLow",
         "icon": "$(octoface)"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "lowlow-vs",
+      "properties": {
+        "lowlow-vs.hostname": {
+          "type": "string",
+          "default": "",
+          "description": "第三方代理地址"
+        },
+        "lowlow-vs.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "第三方代理提供的apiKey"
+        },
+        "lowlow-vs.model": {
+          "type": "string",
+          "default": "gpt-3.5-turbo",
+          "description": "chatGPT模型（默认：gpt-3.5-turbo）"
+        }
+      }
+    }
   },
   "scripts": {
-    "vscode:prepublish": "yarn run compile ",
+    "dev": "yarn --cwd \"webview-vue\" dev",
+    "build": "yarn --cwd \"webview-vue\" build",
+    "vscode:prepublish": "yarn run compile && yarn --cwd \"webview-vue\" build",
     "compile": "webpack --mode production",
     "compile:tsc": "tsc -p ./",
     "watch:tsc": "tsc -watch -p ./",

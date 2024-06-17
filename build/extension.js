@@ -60415,6 +60415,156 @@ function toIdentifier (str) {
 
 /***/ }),
 
+/***/ "./src/commands/createChatGPTView.ts":
+/*!*******************************************!*\
+  !*** ./src/commands/createChatGPTView.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.registerCreateChatGPTView = void 0;
+const vscode_1 = __webpack_require__(/*! vscode */ "vscode");
+const index_1 = __webpack_require__(/*! ../webview/index */ "./src/webview/index.ts");
+// 创建一个 webview 视图
+let webviewViewProvider;
+// 实现 Webview 视图提供者接口，以下内容都是 chatGPT 提供
+class MyWebviewViewProvider {
+    constructor(context) {
+        this.context = context;
+        this.context = context;
+    }
+    resolveWebviewView(webviewView) {
+        this.webview = webviewView.webview;
+        // 设置 enableScripts 选项为 true
+        webviewView.webview.options = {
+            enableScripts: true,
+        };
+        // 设置 Webview 的内容
+        webviewView.webview.html = (0, index_1.getVueHtmlForWebview)(this.context, webviewView.webview);
+        webviewView.webview.onDidReceiveMessage((message) => {
+            // 监听webview反馈回来加载完成，初始化主动推送消息
+            if (message.cmd === 'webviewLoaded') {
+                console.log('反馈消息:', message);
+            }
+        });
+    }
+    // 销毁
+    removeWebView() {
+        this.webview = undefined;
+    }
+}
+const openChatGPTView = (selectedText, gptType) => {
+    // 唤醒 chatGPT 视图
+    vscode_1.commands.executeCommand('workbench.view.extension.lowlow-vs').then(() => {
+        console.log('唤醒');
+        vscode_1.commands.executeCommand('setContext', 'lowlow-vs.chatGPTView', true).then(() => {
+            const config = vscode_1.workspace.getConfiguration('lowlow-vs');
+            const hostname = config.get('hostname');
+            const apiKey = config.get('apiKey');
+            const model = config.get('model');
+            setTimeout(() => {
+                // 发送任务,并传递参数
+                if (!webviewViewProvider || !webviewViewProvider?.webview) {
+                    return;
+                }
+                webviewViewProvider.webview.postMessage({
+                    cmd: 'vscodePushTask',
+                    task: 'route',
+                    data: {
+                        path: '/chat-gpt-view',
+                        query: {
+                            hostname,
+                            apiKey,
+                            selectedText,
+                            model,
+                            gptType,
+                        },
+                    },
+                });
+            }, 500);
+        });
+    });
+};
+const registerCreateChatGPTView = (context) => {
+    // 注册 webview 视图
+    webviewViewProvider = new MyWebviewViewProvider(context);
+    context.subscriptions.push(vscode_1.window.registerWebviewViewProvider('lowlow-vs.chatGPTView', webviewViewProvider, {
+        webviewOptions: {
+            retainContextWhenHidden: true,
+        },
+    }));
+    context.subscriptions.push(
+    // 添加打开视图
+    vscode_1.commands.registerCommand('lowlow-vs.openChatGPTView', () => {
+        console.log('openChatGPTView');
+        openChatGPTView();
+    }), 
+    // 添加关闭视图
+    vscode_1.commands.registerCommand('lowlow-vs.hideChatGPTView', () => {
+        vscode_1.commands.executeCommand('setContext', 'lowlow-vs.chatGPTView', false).then(() => {
+            webviewViewProvider?.removeWebView();
+        });
+    }), 
+    // 添加解释这段文案
+    vscode_1.commands.registerCommand('lowlow-vs.explainByChatGPT', () => {
+        // 获取当前活动的文本编辑器
+        const editor = vscode_1.window.activeTextEditor;
+        if (editor) {
+            // 获取用户选中的文本
+            const selectedText = editor.document.getText(editor.selection);
+            if (!selectedText) {
+                vscode_1.window.showInformationMessage('没有选中的文本');
+                return;
+            }
+            // 获取本插件的设置
+            const config = vscode_1.workspace.getConfiguration('lowlow-vs');
+            const hostname = config.get('hostname');
+            const apiKey = config.get('apiKey');
+            if (!hostname) {
+                vscode_1.window.showInformationMessage('请先设置插件 lowlow 的 hostname，点击左侧标签栏 lowlow 的图标进行设置');
+                return;
+            }
+            if (!apiKey) {
+                vscode_1.window.showInformationMessage('请先设置插件 lowlow 的 apiKey，点击左侧标签栏 lowlow 的图标进行设置');
+                return;
+            }
+            // 打开左侧的 chatGPT 对话框,并传入问题
+            openChatGPTView(selectedText, 'explain');
+        }
+        else {
+            vscode_1.window.showInformationMessage('没有活动的文本编辑器');
+        }
+    }));
+};
+exports.registerCreateChatGPTView = registerCreateChatGPTView;
+
+
+/***/ }),
+
+/***/ "./src/commands/createSetting.ts":
+/*!***************************************!*\
+  !*** ./src/commands/createSetting.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.registerCreateSetting = void 0;
+const vscode_1 = __webpack_require__(/*! vscode */ "vscode");
+const registerCreateSetting = (context) => {
+    context.subscriptions.push(vscode_1.commands.registerCommand('lowlow-vs.openSetting', () => {
+        // 打开插件设置
+        vscode_1.commands.executeCommand('workbench.action.openSettings', 'lowlow-vs');
+    }));
+};
+exports.registerCreateSetting = registerCreateSetting;
+
+
+/***/ }),
+
 /***/ "./src/commands/generateApiCode.ts":
 /*!*****************************************!*\
   !*** ./src/commands/generateApiCode.ts ***!
@@ -62034,7 +62184,7 @@ exports.genCodeByBlockMaterial = genCodeByBlockMaterial;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.showWebView = void 0;
+exports.getVueHtmlForWebview = exports.showWebView = void 0;
 const path = __webpack_require__(/*! path */ "path");
 const vscode = __webpack_require__(/*! vscode */ "vscode");
 const vscode_1 = __webpack_require__(/*! vscode */ "vscode");
@@ -62070,7 +62220,7 @@ const showWebView = (context, options) => {
             retainContextWhenHidden: true, // webview被隐藏时保持状态，避免被重置
         });
         panel.iconPath = vscode.Uri.file(path.join((0, context_1.getExtensionPath)(), 'asset', 'icon.png')); //设置icon
-        panel.webview.html = getVueHtmlForWebview(context, panel.webview); //获取webview html内容并赋值
+        panel.webview.html = (0, exports.getVueHtmlForWebview)(context, panel.webview); //获取webview html内容并赋值
         console.log(panel.webview.html, 'panel.webview.html');
         const disposables = [];
         //   注册webview事件
@@ -62136,6 +62286,7 @@ const getVueHtmlForWebview = (context, webview) => {
     }
     return getWebviewContent(srcUrl);
 };
+exports.getVueHtmlForWebview = getVueHtmlForWebview;
 const getWebviewContent = (srcUri) => {
     return `<!doctype html>
     <html lang="en">
@@ -75420,6 +75571,8 @@ const generateMainCode_1 = __webpack_require__(/*! ./commands/generateMainCode *
 const generateTableCode_1 = __webpack_require__(/*! ./commands/generateTableCode */ "./src/commands/generateTableCode.ts");
 const generateCodebyFigma_1 = __webpack_require__(/*! ./commands/generateCodebyFigma */ "./src/commands/generateCodebyFigma.ts");
 const gennerateCodeByJson_1 = __webpack_require__(/*! ./commands/gennerateCodeByJson */ "./src/commands/gennerateCodeByJson.ts");
+const createSetting_1 = __webpack_require__(/*! ./commands/createSetting */ "./src/commands/createSetting.ts");
+const createChatGPTView_1 = __webpack_require__(/*! ./commands/createChatGPTView */ "./src/commands/createChatGPTView.ts");
 const context_1 = __webpack_require__(/*! ./context */ "./src/context.ts");
 function activate(context) {
     console.log('Congratulations, your extension "lowlow-vscode" is now active!');
@@ -75442,6 +75595,10 @@ function activate(context) {
     (0, generateCodebyFigma_1.registerGenerateFigmaToCode)(context);
     //注册根据json生成代码的命令
     (0, gennerateCodeByJson_1.registerGenerateSnippetCodeByJsonCommand)(context);
+    // 注册编辑设置命令
+    (0, createSetting_1.registerCreateSetting)(context);
+    //注册chatgpt相关命令
+    (0, createChatGPTView_1.registerCreateChatGPTView)(context);
 }
 exports.activate = activate;
 function deactivate() { }

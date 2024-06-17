@@ -5,6 +5,9 @@ import { registerGenerateMainCodeCommand } from './commands/generateMainCode'
 import { registerGenerateTableCodeCommand } from './commands/generateTableCode'
 import { registerGenerateFigmaToCode } from './commands/generateCodebyFigma'
 import { registerGenerateSnippetCodeByJsonCommand } from './commands/gennerateCodeByJson'
+import { registerCreateSetting } from './commands/createSetting'
+import { registerCreateChatGPTView } from './commands/createChatGPTView'
+
 import { init, setLastActiveTextEditorId } from './context'
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "lowlow-vscode" is now active!')
@@ -33,6 +36,10 @@ export function activate(context: vscode.ExtensionContext) {
   registerGenerateFigmaToCode(context)
   //注册根据json生成代码的命令
   registerGenerateSnippetCodeByJsonCommand(context)
+  // 注册编辑设置命令
+  registerCreateSetting(context)
+  //注册chatgpt相关命令
+  registerCreateChatGPTView(context)
 }
 
 export function deactivate() {}

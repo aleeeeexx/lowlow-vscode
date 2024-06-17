@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 const autoFormConfig = () => import('../pages/autoFormConfig/index.vue')
 const autoTableConfig = () => import('../pages/autoTableConfig/index.vue')
+import ChatGPTIndex from '../pages/chatGPT/Index/index.vue'
+
 // 1. 定义路由组件.
 // 也可以从其他文件导入
 const routes = [
@@ -17,6 +19,11 @@ const routes = [
     meta: {
       title: '配置表格',
     },
+  },
+  {
+    path: '/chat-gpt-view',
+    name: 'chatGPT',
+    component: ChatGPTIndex,
   },
 ]
 
