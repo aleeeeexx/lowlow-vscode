@@ -4,5 +4,6 @@ export default class Service {
 
   constructor(model: Model) {
     this.model = model
+    console.log(this.model)
   }
 }
