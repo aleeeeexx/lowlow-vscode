@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-const autoFormConfig = () => import('../pages/autoFormConfig/index.vue')
-const autoTableConfig = () => import('../pages/autoTableConfig/index.vue')
-import ChatGPTIndex from '../pages/chatGPT/Index/index.vue'
+const autoFormConfig = () => import('@/pages/autoFormConfig/index.vue')
+const autoTableConfig = () => import('@/pages/autoTableConfig/index.vue')
+import ChatGPTIndex from '@/pages/chatGPT/Index/index.vue'
 
 // 1. 定义路由组件.
 // 也可以从其他文件导入

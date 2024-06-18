@@ -2,6 +2,7 @@
 // 和vscode对接的桥梁
 //vscode变量已在获取webvie html时提前注册好window.vscode = acquireVsCodeApi();
 
+//@ts-nocheck
 import { message as antdMessage } from 'ant-design-vue'
 import router from '../router'
 

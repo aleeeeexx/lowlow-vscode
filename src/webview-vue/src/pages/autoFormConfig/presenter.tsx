@@ -77,6 +77,7 @@ export const usePresenter = () => {
 
   const handleConfirmGenerateCode = () => {
     //获取当前操作文件路径
+    //@ts-ignore
     const selectedFolder = localStorage.getItem('selectedFolder')
     // 把数据传输到vscode
     genCodeByBlockMaterial({

@@ -36,7 +36,7 @@ export const usePresenter = () => {
       }
     }
   }
-  const onFilterEdit = (targetKey: string | MouseEvent, action: string) => {
+  const onFilterEdit = (targetKey: string, action: string) => {
     if (action === 'add') {
       filterAdd()
     } else {
@@ -75,7 +75,7 @@ export const usePresenter = () => {
       }
     }
   }
-  const onTableEdit = (targetKey: string | MouseEvent, action: string) => {
+  const onTableEdit = (targetKey: string, action: string) => {
     if (action === 'add') {
       tableAdd()
     } else {
@@ -91,6 +91,7 @@ export const usePresenter = () => {
       includeModifyModal: false,
       modifyMOdal: {},
     }
+    //@ts-ignore
     const selectedFolder = localStorage.getItem('selectedFolder')
     genCodeByBlockMaterial({
       material: '增删改查列表页',

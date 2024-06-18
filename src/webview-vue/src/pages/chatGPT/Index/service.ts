@@ -50,6 +50,7 @@ export default class Service {
 
       if (currentIndex < orginText.length) {
         const timeout = setTimeout(() => {
+          //@ts-ignore
           requestAnimationFrame(animate)
           // requestAnimationFrame 感觉太快了，延迟一下
           if (currentIndex === orginText.length - 1) {
