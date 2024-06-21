@@ -22,6 +22,6 @@ export default defineConfig({
       fileName: `main`, // 打包后的文件名【可以自定义】
     },
     sourcemap: false, // 输出.map文件
-    outDir: '../webview-dist', // 将打包文件拉出来，直接给插件项目使用
+    outDir: '../../webview-dist', // 将打包文件拉出来，直接给插件项目使用
   },
 })

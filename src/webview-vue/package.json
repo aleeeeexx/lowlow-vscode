@@ -2,7 +2,6 @@
   "name": "alex",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
@@ -22,7 +21,7 @@
     "sass": "^1.77.2",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
-    "vite-plugin-css-injected-by-js": "^3.5.1",
+    "vite-plugin-css-injected-by-js": "3.3.0",
     "vue-tsc": "^2.0.6"
   }
 }

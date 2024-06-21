@@ -142,7 +142,7 @@ const getWebviewContent = (srcUri: string | vscode.Uri) => {
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width,initial-scale=1">
-      <title>webview-react</title>
+      <title>webview-vue</title>
       <script>
          window.vscode = acquireVsCodeApi();
          window.process = {

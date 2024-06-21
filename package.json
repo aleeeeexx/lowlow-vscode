@@ -4,7 +4,7 @@
   "description": "a vscode-plugin for lowcode and will support ChatGPT",
   "author": "Aleeeeex <https://github.com/aleeeeexx>",
   "icon": "assets/logo.jpg",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "Aleeeeex",
   "repository": "https://github.com/aleeeeexx/lowlow-vscode",
   "engines": {
@@ -69,7 +69,7 @@
         {
           "id": "lowlow-vs",
           "title": "lowlow-vs",
-          "icon": "images/hubot.png"
+          "icon": "assets/side-icon.svg"
         }
       ]
     },
@@ -194,7 +194,7 @@
   "scripts": {
     "dev": "yarn --cwd \"webview-vue\" dev",
     "build": "yarn --cwd \"webview-vue\" build",
-    "vscode:prepublish": "yarn run compile && yarn --cwd \"webview-vue\" build",
+    "vscode:prepublish": "yarn run compile ",
     "compile": "webpack --mode production",
     "compile:tsc": "tsc -p ./",
     "watch:tsc": "tsc -watch -p ./",
