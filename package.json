@@ -1,7 +1,7 @@
 {
   "name": "lowlow-vscode",
   "displayName": "lowlow",
-  "description": "a vscode-plugin for lowcode and will support ChatGPT",
+  "description": "a vscode-plugin for lowcode and will support ChatGPT  一个用于提升效率的低代码工具，一个vscode编辑插件",
   "author": "Aleeeeex <https://github.com/aleeeeexx>",
   "icon": "assets/logo.jpg",
   "version": "1.0.6",
